@@ -1,3 +1,4 @@
+import { CabinI } from '../features/cabins/CabinTable';
 import supabase from './supabase';
 
 export async function getCabins() {
@@ -6,6 +7,7 @@ export async function getCabins() {
     console.error(error);
     throw new Error('Canbins can not be loaded');
   }
+  const cabinsData = data as CabinI[];
 
-  return data;
+  return cabinsData;
 }
