@@ -4,8 +4,6 @@ type RowProps = {
   type?: 'horizontal' | 'vertical';
 };
 const Row = styled.div<RowProps>`
-  display: flex;
-
   ${(props) =>
     props.type === 'horizontal' &&
     css`

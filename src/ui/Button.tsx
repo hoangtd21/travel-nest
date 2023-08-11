@@ -49,7 +49,7 @@ const variations = {
 };
 
 type ButtonProps = {
-  variation: 'primary';
+  variation: 'primary' | 'secondary';
   size: 'medium';
 };
 
