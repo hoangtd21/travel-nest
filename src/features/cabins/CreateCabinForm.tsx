@@ -4,7 +4,7 @@ import Input from '../../ui/Input';
 import Form from '../../ui/Form';
 import Button from '../../ui/Button';
 import FileInput from '../../ui/FileInput';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { Textarea } from '../../ui/Textarea';
 
 const FormRow = styled.div`
@@ -42,11 +42,20 @@ const Label = styled.label`
 //   font-size: 1.4rem;
 //   color: var(--color-red-700);
 // `;
+interface FormDataI {
+  name: string;
+  maxCapacity: number;
+  regularPrice: number;
+  discount: number;
+  description: string;
+}
 
 function CreateCabinForm() {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<FormDataI>();
 
-  function onSubmit(data) {}
+  const onSubmit: SubmitHandler<FormDataI> = (data) => {
+    console.log(data);
+  };
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -57,7 +66,7 @@ function CreateCabinForm() {
 
       <FormRow>
         <Label htmlFor="maxCapacity">Maximum capacity</Label>
-        <Input type="number" id="maxCapacity" {...register('maxCapcity')} />
+        <Input type="number" id="maxCapacity" {...register('maxCapacity')} />
       </FormRow>
 
       <FormRow>
