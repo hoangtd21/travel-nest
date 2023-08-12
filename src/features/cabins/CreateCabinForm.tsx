@@ -6,6 +6,10 @@ import Button from '../../ui/Button';
 import FileInput from '../../ui/FileInput';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Textarea } from '../../ui/Textarea';
+import { FormDataI } from './cabin-model';
+import { createCabin } from '../../services/apiCabins';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-hot-toast';
 
 const FormRow = styled.div`
   display: grid;
@@ -42,19 +46,32 @@ const Label = styled.label`
 //   font-size: 1.4rem;
 //   color: var(--color-red-700);
 // `;
-interface FormDataI {
-  name: string;
-  maxCapacity: number;
-  regularPrice: number;
-  discount: number;
-  description: string;
-}
 
 function CreateCabinForm() {
   const { register, handleSubmit } = useForm<FormDataI>();
+  // After created cabin success => need re-render cabin to get data
+  const queryClient = useQueryClient();
+
+  const {
+    isLoading: isCreating,
+    mutate,
+    reset,
+  } = useMutation({
+    mutationFn: createCabin,
+    onSuccess: () => {
+      toast.success('Create cabin successful');
+      queryClient.invalidateQueries({ queryKey: ['cabins'] });
+      reset();
+    },
+    onError: (err) => {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      }
+    },
+  });
 
   const onSubmit: SubmitHandler<FormDataI> = (data) => {
-    console.log(data);
+    mutate(data);
   };
 
   return (
@@ -104,7 +121,7 @@ function CreateCabinForm() {
         <Button variation="secondary" size="medium" type="reset">
           Cancel
         </Button>
-        <Button variation="primary" size="medium">
+        <Button variation="primary" size="medium" disabled={isCreating}>
           Add cabin
         </Button>
       </FormRow>

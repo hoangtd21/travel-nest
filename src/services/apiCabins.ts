@@ -1,4 +1,5 @@
 import { CabinI } from '../features/cabins/CabinTable';
+import { FormDataI } from '../features/cabins/cabin-model';
 import supabase from './supabase';
 
 export async function getCabins() {
@@ -18,6 +19,17 @@ export async function deleteCabin(id: number) {
   if (error) {
     console.error(error);
     throw new Error('Canbins can not be deleted');
+  }
+
+  return data;
+}
+
+export async function createCabin(newCabin: FormDataI) {
+  const { data, error } = await supabase.from('cabins').insert([newCabin]);
+
+  if (error) {
+    console.error(error);
+    throw new Error('Canbins can not be created');
   }
 
   return data;
