@@ -4,4 +4,6 @@ export interface FormDataI {
   regularPrice: number;
   discount: number;
   description: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  image: any;
 }
