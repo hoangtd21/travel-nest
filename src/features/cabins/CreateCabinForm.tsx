@@ -24,7 +24,7 @@ function CreateCabinForm({
     image: undefined,
   },
 }: {
-  cabinToEdit: CabinEditProps;
+  cabinToEdit?: CabinEditProps;
 }) {
   const { id: editId, ...editValue } = cabinToEdit;
   const isEditSession = Boolean(editId);
