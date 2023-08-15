@@ -59,7 +59,8 @@ export async function createEditCabin(newCabin: FormDataI, id?: number) {
     ? newCabin.image
     : `${supabaseUrl}/storage/v1/object/public/cabin-images/${imageName}`;
 
-  let query = supabase.from('cabins');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let query: any = supabase.from('cabins');
 
   if (!id) {
     query = query.insert([{ ...newCabin, image: imagePath }]);
@@ -74,10 +75,13 @@ export async function createEditCabin(newCabin: FormDataI, id?: number) {
     throw new Error('Canbins can not be created');
   }
 
+  // upload image
+  if(hasImagePath) return data;
   const { error: errorStorage } = await supabase.storage
     .from('cabin-images')
     .upload(imageName, newCabin.image);
 
+    // If have error when upload image => delete cabin
   if (errorStorage) {
     await supabase.from('cabins').delete().eq('id', data?.id);
     console.error(errorStorage);
