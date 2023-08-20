@@ -1,4 +1,9 @@
-import React from 'react';
+import React, {
+  cloneElement,
+  createContext,
+  useContext,
+  useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 import { HiXMark } from 'react-icons/hi2';
 import styled from 'styled-components';
@@ -52,25 +57,71 @@ const Button = styled.button`
   }
 `;
 
-function Modal({
+interface ModalContextI {
+  open: React.Dispatch<React.SetStateAction<string>>;
+  openName: string;
+  close: () => void;
+}
+
+// Apply compound component pattern to reuse Modal any where
+// 1. Create context
+const ModalContext = createContext<ModalContextI>({
+  open: () => null,
+  openName: '',
+  close,
+});
+
+// 2. Create parent component
+function Modal({ children }: { children: React.ReactNode }) {
+  const [openName, setOpenName] = useState('');
+  const close = () => setOpenName('');
+  const open = setOpenName;
+  return (
+    <ModalContext.Provider value={{ openName, close, open }}>
+      {children}
+    </ModalContext.Provider>
+  );
+}
+
+// 3. Create child component
+function Window({
   children,
-  onClose,
+  name,
 }: {
-  children: React.ReactNode;
-  onClose: () => void;
+  children: React.ReactElement;
+  name: string;
 }) {
+  const { openName, close } = useContext(ModalContext);
+
+  if (name !== openName) return null;
+
   return createPortal(
     <Overlay>
       <StyledModal>
-        <Button onClick={onClose}>
+        <Button onClick={close}>
           <HiXMark />
         </Button>
-        <div>{children}</div>
+        <div>{cloneElement(children, { onCloseModal: close })}</div>
       </StyledModal>
-      ;
     </Overlay>,
     document.body
   );
 }
+
+// Binding event onClick for button element
+function Open({
+  children,
+  opens: opensWindowName,
+}: {
+  children: React.ReactElement;
+  opens: string;
+}) {
+  const { open } = useContext(ModalContext);
+  return cloneElement(children, { onClick: () => open(opensWindowName) });
+}
+
+// 4. Add child component to parent component
+Modal.Open = Open;
+Modal.Window = Window;
 
 export default Modal;

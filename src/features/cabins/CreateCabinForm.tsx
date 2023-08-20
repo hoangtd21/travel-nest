@@ -25,7 +25,7 @@ function CreateCabinForm({
   onCloseModal,
 }: {
   cabinToEdit?: CabinEditProps;
-  onCloseModal: () => void;
+  onCloseModal?: () => void;
 }) {
   const { id: editId, ...editValue } = cabinToEdit;
   const isEditSession = Boolean(editId);
@@ -51,7 +51,7 @@ function CreateCabinForm({
         {
           onSuccess: () => {
             reset();
-            onCloseModal();
+            onCloseModal?.();
           },
         }
       );
