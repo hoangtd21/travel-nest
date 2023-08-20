@@ -61,6 +61,7 @@ function CreateCabinForm({
         {
           onSuccess: () => {
             reset();
+            onCloseModal?.();
           },
         }
       );
