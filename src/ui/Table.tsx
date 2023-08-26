@@ -52,12 +52,12 @@ const Footer = styled.footer`
   }
 `;
 
-// const Empty = styled.p`
-//   font-size: 1.6rem;
-//   font-weight: 500;
-//   text-align: center;
-//   margin: 2.4rem;
-// `;
+const Empty = styled.p`
+  font-size: 1.6rem;
+  font-weight: 500;
+  text-align: center;
+  margin: 2.4rem;
+`;
 
 interface TableContextI {
   columns: string;
@@ -96,8 +96,16 @@ function Row({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Body({ children }: { children: React.ReactNode }) {
-  return <StyledBody>{children}</StyledBody>;
+function Body({
+  data,
+  render,
+}: {
+  data: unknown[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  render: (item: any) => JSX.Element;
+}) {
+  if (!data.length) return <Empty>No data</Empty>;
+  return <StyledBody>{data.map(render)}</StyledBody>;
 }
 
 Table.Header = Header;
