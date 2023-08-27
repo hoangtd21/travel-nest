@@ -1,6 +1,9 @@
+import { createContext, useContext, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { HiEllipsisVertical } from 'react-icons/hi2';
 import styled from 'styled-components';
 
-const StyledMenu = styled.div`
+const Menu = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -25,7 +28,7 @@ const StyledToggle = styled.button`
   }
 `;
 
-const StyledList = styled.ul`
+const StyledList = styled.ul<{ position: { x: number; y: number } }>`
   position: fixed;
 
   background-color: var(--color-grey-0);
@@ -60,3 +63,67 @@ const StyledButton = styled.button`
     transition: all 0.3s;
   }
 `;
+
+interface MenusContextI {
+  openId: string | undefined;
+  close: () => void;
+  open: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const MenusContext = createContext<MenusContextI>({
+  openId: '',
+  close: () => {},
+  open: () => {},
+});
+
+function Menus({ children }: { children: React.ReactNode }) {
+  const [openId, setOpenId] = useState<string>('');
+
+  const close = () => setOpenId('');
+  const open = setOpenId;
+
+  return (
+    <MenusContext.Provider value={{ openId, close, open }}>
+      {children}
+    </MenusContext.Provider>
+  );
+}
+
+function Toggle({ id }: { id: number }) {
+  const { openId, open, close } = useContext(MenusContext);
+
+  const handleClick = () =>
+    openId === '' || openId !== String(id) ? open(String(id)) : close();
+
+  return (
+    <StyledToggle onClick={handleClick}>
+      <HiEllipsisVertical />
+    </StyledToggle>
+  );
+}
+
+function List({ id, children }: { id: number; children: React.ReactNode }) {
+  const { openId } = useContext(MenusContext);
+
+  if (openId !== String(id)) return null;
+
+  return createPortal(
+    <StyledList position={{ x: 20, y: 20 }}>{children}</StyledList>,
+    document.body
+  );
+}
+
+function Button({ children }: { children: React.ReactNode }) {
+  return (
+    <li>
+      <StyledButton>{children}</StyledButton>
+    </li>
+  );
+}
+
+Menus.Menu = Menu;
+Menus.Toggle = Toggle;
+Menus.List = List;
+Menus.Button = Button;
+
+export default Menus;
