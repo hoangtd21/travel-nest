@@ -69,7 +69,7 @@ function CreateCabinForm({
   };
 
   const onError = (error: FieldErrors<FormDataI>) => {
-    console.log(error);
+    console.error(error);
   };
 
   const isWorking = isUpdating || isCreating;
