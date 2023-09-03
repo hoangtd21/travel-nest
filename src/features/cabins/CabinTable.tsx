@@ -19,7 +19,6 @@ function CabinTable() {
   const { cabins, isLoading } = useCabins();
   const [searchParams] = useSearchParams();
   const filterValue = searchParams.get('discount') || 'all';
-  console.log(filterValue);
 
   let filteredCabins: CabinI[] | undefined;
   if (filterValue === 'all') filteredCabins = cabins;
