@@ -36,7 +36,13 @@ function CabinTable() {
   const [field, direction] = sortBy.split('-') as [keyof CabinI, string];
   const modifier = direction === 'asc' ? 1 : -1;
   const sortedCabins = filteredCabins?.sort((a, b) => {
-    return (a[field] - b[field]) * modifier;
+    const valueA =
+      typeof a[field] === 'string' ? String(a[field]).toLowerCase() : a[field];
+    const valueB =
+      typeof b[field] === 'string' ? String(b[field]).toLowerCase() : b[field];
+    if (valueA < valueB) return -1 * modifier;
+    if (valueA > valueB) return 1 * modifier;
+    return 0;
   });
 
   if (isLoading) return <Spinner />;
