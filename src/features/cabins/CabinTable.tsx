@@ -18,9 +18,11 @@ export interface CabinI {
 function CabinTable() {
   const { cabins, isLoading } = useCabins();
   const [searchParams] = useSearchParams();
+  let filteredCabins: CabinI[] | undefined;
+
+  // Filter
   const filterValue = searchParams.get('discount') || 'all';
 
-  let filteredCabins: CabinI[] | undefined;
   if (filterValue === 'all') filteredCabins = cabins;
   if (filterValue === 'no-discount') {
     filteredCabins = cabins?.filter((cabin) => cabin.discount === 0);
@@ -28,6 +30,14 @@ function CabinTable() {
   if (filterValue === 'with-discount') {
     filteredCabins = cabins?.filter((cabin) => cabin.discount > 0);
   }
+
+  // Sort
+  const sortBy = searchParams.get('sortBy') || 'startDate-asc';
+  const [field, direction] = sortBy.split('-') as [keyof CabinI, string];
+  const modifier = direction === 'asc' ? 1 : -1;
+  const sortedCabins = filteredCabins?.sort((a, b) => {
+    return (a[field] - b[field]) * modifier;
+  });
 
   if (isLoading) return <Spinner />;
   return (
@@ -42,7 +52,8 @@ function CabinTable() {
           <div></div>
         </Table.Header>
         <Table.Body
-          data={filteredCabins ? filteredCabins : []}
+          // data={filteredCabins ? filteredCabins : []}
+          data={sortedCabins ? sortedCabins : []}
           render={(cabin) => <CabinRow cabin={cabin} key={cabin.id} />}
         />
       </Table>
