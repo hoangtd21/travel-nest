@@ -1,5 +1,15 @@
+import { BookingI } from "../features/bookings/BookingRow";
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
+
+export async function getBookings() {
+  const {data, error} = await supabase.from("bookings").select('*, cabins(name), guests(fullName, email)')
+  
+  if(error){
+    throw new Error('Bookings can not be loaded');
+  }
+  return data as BookingI[]
+}
 
 export async function getBooking(id:number) {
   const { data, error } = await supabase
