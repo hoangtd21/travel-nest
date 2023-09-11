@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import { StatusBooking } from '../features/bookings/BookingRow';
 
-const Tag = styled.span<{ type: StatusBooking }>`
+const Tag = styled.span<{ type: string }>`
   width: fit-content;
   text-transform: uppercase;
   font-size: 1.1rem;
