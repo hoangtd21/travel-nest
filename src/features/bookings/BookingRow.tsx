@@ -42,9 +42,20 @@ export interface BookingI {
   endDate: string;
   numNights: number;
   numGuests: number;
+  cabinPrice: number;
+  extrasPrice: number;
   totalPrice: number;
+  hasBreakfast: boolean;
+  observations: string;
+  isPaid: boolean;
   status: StatusBooking;
-  guests: { fullName: string; email: string };
+  guests: {
+    fullName: string;
+    email: string;
+    country: string;
+    nationalFlag: string;
+    nationalID: string;
+  };
   cabins: { name: string };
 }
 
