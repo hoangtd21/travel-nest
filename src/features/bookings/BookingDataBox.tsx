@@ -102,7 +102,6 @@ const Footer = styled.footer`
   text-align: right;
 `;
 
-// A purely presentational component
 function BookingDataBox({ booking }: { booking: BookingI }) {
   const {
     created_at,
