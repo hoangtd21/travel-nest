@@ -13,15 +13,15 @@
     "precommit": "lint-staged",
     "prepare": "husky install"
   },
-  "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx}": [
-      "npm run lint"
-    ]
-  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": [
+      "npm run lint"
+    ]
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.32.0",
