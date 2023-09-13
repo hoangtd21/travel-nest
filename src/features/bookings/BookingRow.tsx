@@ -35,6 +35,15 @@ const Amount = styled.div`
 `;
 
 export type StatusBooking = 'unconfirmed' | 'checked-in' | 'checked-out';
+
+export interface GuestI {
+  fullName: string;
+  email: string;
+  nationality: string;
+  countryFlag: string;
+  nationalID: string;
+}
+
 export interface BookingI {
   id: number;
   created_at: string;
@@ -49,13 +58,7 @@ export interface BookingI {
   observations: string;
   isPaid: boolean;
   status: StatusBooking;
-  guests: {
-    fullName: string;
-    email: string;
-    country: string;
-    nationalFlag: string;
-    nationalID: string;
-  };
+  guests: GuestI;
   cabins: { name: string };
 }
 
