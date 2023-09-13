@@ -55,7 +55,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "npm run test"
+      "vitest related --run"
     ]
   }
 }
