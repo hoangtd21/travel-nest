@@ -9,7 +9,19 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "precommit": "lint-staged",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn precommit"
+    }
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.32.0",
@@ -38,7 +50,9 @@
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
+    "husky": "^8.0.3",
     "jsdom": "^22.1.0",
+    "lint-staged": "^14.0.1",
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
     "vite-plugin-eslint": "^1.8.1",
