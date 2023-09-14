@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import Button from '../ui/Button';
 
 const meta = {
@@ -20,7 +20,9 @@ const meta = {
 
 export default meta;
 
-export const Primary = {
+type Story = StoryObj<typeof meta>;
+
+export const Primary: Story = {
   args: {
     variation: 'primary',
     size: 'medium',
