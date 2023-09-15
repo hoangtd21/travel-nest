@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Button from '../ui/Button';
 
 const meta = {
-  title: 'Example/Button',
+  title: 'UI common/Button',
   component: Button,
   tags: ['autodocs'],
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
