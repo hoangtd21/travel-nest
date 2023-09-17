@@ -1,6 +1,8 @@
+import { PostgrestError } from '@supabase/supabase-js';
 import { BookingI } from '../features/bookings/BookingRow';
 import { getToday } from '../utils/helpers';
 import supabase from './supabase';
+import { PAGE_SIZE } from '../ui/Pagination';
 
 type FilterOperator =
   | 'eq'
@@ -26,13 +28,15 @@ type TSortBy = {
 export async function getBookings({
   filter,
   sortBy,
+  page,
 }: {
   filter: TFilter;
   sortBy: TSortBy;
+  page: number;
 }) {
   let query = supabase
     .from('bookings')
-    .select('*, cabins(name), guests(fullName, email)');
+    .select('*, cabins(name), guests(fullName, email)', { count: 'exact' });
 
   // Filter
   const methodCompare = filter?.method || 'eq';
@@ -42,11 +46,21 @@ export async function getBookings({
   const isAscending = sortBy.direction === 'asc';
   if (sortBy) query = query.order(sortBy.field, { ascending: isAscending });
 
-  const { data, error } = await query;
+  // Pagination
+  const from = (page - 1) * PAGE_SIZE;
+  const to = from + PAGE_SIZE - 1;
+  if (page) query = query.range(from, to);
+
+  const { data, error, count } = (await query) as {
+    data: BookingI[];
+    error: PostgrestError | null;
+    count: number;
+  };
   if (error) {
     throw new Error('Bookings can not be loaded');
   }
-  return data as BookingI[];
+  // return data as BookingI[];
+  return { data, count };
 }
 
 export async function getBooking(id: number) {
