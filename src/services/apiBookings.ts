@@ -18,13 +18,29 @@ type TFilter = {
   method?: FilterOperator;
 } | null;
 
-export async function getBookings({ filter }: { filter: TFilter }) {
+type TSortBy = {
+  field: keyof BookingI;
+  direction: string;
+};
+
+export async function getBookings({
+  filter,
+  sortBy,
+}: {
+  filter: TFilter;
+  sortBy: TSortBy;
+}) {
   let query = supabase
     .from('bookings')
     .select('*, cabins(name), guests(fullName, email)');
 
+  // Filter
   const methodCompare = filter?.method || 'eq';
-  if (filter !== null) query = query[methodCompare](filter.field, filter.value);
+  if (filter) query = query[methodCompare](filter.field, filter.value);
+
+  // Sort
+  const isAscending = sortBy.direction === 'asc';
+  if (sortBy) query = query.order(sortBy.field, { ascending: isAscending });
 
   const { data, error } = await query;
   if (error) {
