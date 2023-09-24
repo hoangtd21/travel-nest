@@ -64,11 +64,14 @@ export async function getBookings({
 }
 
 export async function getBooking(id: number) {
-  const { data, error } = await supabase
+  const { data, error } = (await supabase
     .from('bookings')
     .select('*, cabins(*), guests(*)')
     .eq('id', id)
-    .single();
+    .single()) as {
+    data: BookingI;
+    error: PostgrestError | null;
+  };
 
   if (error) {
     console.error(error);
