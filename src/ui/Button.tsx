@@ -50,7 +50,7 @@ const variations = {
 
 type ButtonProps = {
   variation: 'primary' | 'secondary' | 'danger';
-  size: 'medium';
+  size: 'medium' | 'small';
 };
 
 const Button = styled.button<ButtonProps>`
